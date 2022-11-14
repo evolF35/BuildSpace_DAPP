@@ -11,6 +11,7 @@ contract WavePortal {
     uint256 private seed;
 
     mapping (address => uint256) public wavooors;
+    mapping (address => uint256) public lastWavedAt;
 
     event NewWave(address indexed from, uint256 timestamp, string message);
 
@@ -31,6 +32,10 @@ contract WavePortal {
     }
 
     function wave(string memory _message) public {
+
+        require(lastWavedAt[msg.sender]+ 1 minutes < block.timestamp,"waIT");
+        lastWavedAt[msg.sender] = block.timestamp;
+
         totalWaves = totalWaves + 1;
         addwave();
         waves.push(Wave(msg.sender, _message, block.timestamp));
